@@ -1,7 +1,11 @@
+require("dotenv").config();
 const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 
 const app = express();
+
+const db = require("./models");
+db.sequelize.sync();
 
 app.use(expressLayouts);
 app.set("view engine", "ejs");

@@ -4,13 +4,13 @@ const expressLayouts = require("express-ejs-layouts");
 const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
-const db = require("./models");
+
 
 const app = express();
 
 require('./config/passport-local')(passport);
 
-db.sequelize.sync();
+// db.sequelize.sync();
 
 app.use(expressLayouts);
 app.set("view engine", "ejs");
@@ -25,6 +25,8 @@ app.use(
         saveUninitialized: true
     })
 );
+
+
 
 app.use(passport.initialize());
 app.use(passport.session());

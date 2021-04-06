@@ -1,41 +1,46 @@
 const LocalStrategy = require('passport-local').Strategy;
-const brypt = require('bcryptjs');
-const User = require('../models').User
+const passport = require('passport')
+const bcrypt = require('bcryptjs');
+const db = require('../models')
+const User = db.User
 
 module.exports = function (passport) {
-    passport.use(
-        new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
-            // Match user
-            User.findOne({
-                where: {
-                    email: email
-                }
+    passport.use(new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'password',
+    },
+        async function (username, password, done) {
+            const validPassword = async function (userpass, password) {
+                return await bcrypt.compare(password, userpass)
+            }
 
-            }).then(user => {
+            await User.findOne({ where: { email: username } }).then(function (user, userpass, password) {
                 if (!user) {
-                    return done(null, false, { message: 'That email is not registered' });
+                    return done(null, false, { message: 'Incorrect email address.' });
                 }
-
-                // Match password
-                bcrypt.compare(password, user.password, (err, isMatch) => {
-                    if (err) throw err;
-                    if (isMatch) {
-                        return done(null, user);
-                    } else {
-                        return done(null, false, { message: 'Password incorrect' });
-                    }
-                });
+                if (!validPassword(userpass, password)) {
+                    return done(null, false, { message: 'Incorrect password.' });
+                }
+                return done(null, user);
             });
-        })
-    );
+
+        }
+
+    ));
 
     passport.serializeUser(function (user, done) {
         done(null, user.id);
     });
 
-    passport.deserializeUser(function (id, done) {
-        User.findByPk(id, function (err, user) {
-            done(err, user);
-        });
+    passport.deserializeUser(async (id, done) => {
+        try {
+            let user = await User.findByPk(id);
+            if (!user) {
+                return done(new Error('user not found'));
+            }
+            done(null, user);
+        } catch (error) {
+            done(error);
+        }
     });
 };

@@ -10,6 +10,7 @@ const app = express();
 
 require('./config/passport-local')(passport);
 
+
 // db.sequelize.sync();
 
 app.use(expressLayouts);
@@ -42,6 +43,7 @@ app.use((req, res, next) => {
 
 app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
+app.use('/auth', require('./routes/auth-gh'))
 
 const PORT = process.env.PORT || 5000;
 

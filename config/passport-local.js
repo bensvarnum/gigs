@@ -1,8 +1,8 @@
 const LocalStrategy = require('passport-local').Strategy;
 const passport = require('passport')
 const bcrypt = require('bcryptjs');
-const db = require('../models')
-const User = db.User
+const User = require('../models').User
+
 
 module.exports = function (passport) {
     passport.use(new LocalStrategy({
@@ -10,37 +10,28 @@ module.exports = function (passport) {
         passwordField: 'password',
     },
         async function (username, password, done) {
-            const validPassword = async function (userpass, password) {
-                return await bcrypt.compare(password, userpass)
+            const user = await User.findOne({
+                where: {
+                    email: username
+                }
+            }).catch(error => { return done(error) });
+            if (!user) {
+                return done(null, false, { message: 'That email is not registered' });
             }
-
-            await User.findOne({ where: { email: username } }).then(function (user, userpass, password) {
-                if (!user) {
-                    return done(null, false, { message: 'Incorrect email address.' });
-                }
-                if (!validPassword(userpass, password)) {
-                    return done(null, false, { message: 'Incorrect password.' });
-                }
-                return done(null, user);
-            });
-
+            let matched = await bcrypt.compare(password, user.password);
+            if (!matched) {
+                return done(null, false, { message: 'Password is incorrect' });
+            }
+            return done(null, user);
         }
 
     ));
 
     passport.serializeUser(function (user, done) {
-        done(null, user.id);
+        done(null, user);
     });
 
-    passport.deserializeUser(async (id, done) => {
-        try {
-            let user = await User.findByPk(id);
-            if (!user) {
-                return done(new Error('user not found'));
-            }
-            done(null, user);
-        } catch (error) {
-            done(error);
-        }
+    passport.deserializeUser(function (user, done) {
+        done(null, user);
     });
 };

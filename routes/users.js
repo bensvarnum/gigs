@@ -72,32 +72,4 @@ router.get('/logout', (req, res) => {
   res.redirect('/users/login');
 });
 
-router.post('/my-login-with-log',
-  // wrap passport.authenticate call in a middleware function
-  function (req, res, next) {
-    // call passport authentication passing the "local" strategy name and a callback function
-    passport.authenticate('local', function (error, user, info) {
-      // this will execute in any case, even if a passport strategy will find an error
-      // log everything to console
-      console.log("error", error);
-      console.log("user", user.dataValues.name);
-      console.log("info", info);
-
-      if (error) {
-        res.status(401).send(error);
-      } else if (!user) {
-        res.status(401).send(info);
-      } else {
-        next();
-      }
-
-      res.status(401).send(info);
-    })(req, res);
-  },
-
-  // function to call once successfully authenticated
-  function (req, res) {
-    res.status(200).redirect('/dashboard');
-  });
-
 module.exports = router;

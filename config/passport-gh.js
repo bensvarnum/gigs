@@ -5,8 +5,8 @@ const User = require('../models').User
 
 // http://localhost:5000/auth/github/callback
 passport.use(new GitHubStrategy({
-    clientID: GITHUB_CLIENT_ID,
-    clientSecret: GITHUB_CLIENT_SECRET,
+    clientID: process.env.GITHUB_CLIENT_ID,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: "https://devswanted.herokuapp.com/auth/github/callback"
 },
     async function (accessToken, refreshToken, profile, done) {

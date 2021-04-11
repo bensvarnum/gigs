@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const Gig = require('../models').Gig
 const { ensureAuthenticated } = require('../config/auth');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 router.get('/all', ensureAuthenticated, (req, res) => {
 
@@ -60,6 +62,17 @@ router.post('/add', ensureAuthenticated, (req, res) => {
       .then(gigs => res.redirect('all'))
       .catch(err => res.render('error', { error: err.message }))
   }
+});
+
+router.get('/search', (req, res) => {
+  let { term } = req.query;
+
+  // Make lowercase
+  term = term.toLowerCase();
+
+  Gig.findAll({ where: { technologies: { [Op.like]: '%' + term + '%' } } })
+    .then(gigs => res.render('gigs', { gigs, user: req.user }))
+    .catch(err => res.render('error', { error: err }));
 });
 
 module.exports = router

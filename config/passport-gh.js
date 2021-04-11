@@ -28,7 +28,7 @@ passport.use(new GitHubStrategy({
             }
             done(null, profile)
         } catch (err) {
-            console.log(err)
+            console.error("OOPS, something went wrong", err)
         }
 
     }

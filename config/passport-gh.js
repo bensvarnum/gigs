@@ -10,22 +10,27 @@ passport.use(new GitHubStrategy({
     callbackURL: "https://devswanted.herokuapp.com/auth/github/callback"
 },
     async function (accessToken, refreshToken, profile, done) {
-        let user = await User.findOne({ where: { githubId: parseInt(profile.id) } })
+        try {
+            let user = await User.findOne({ where: { githubId: parseInt(profile.id) } })
 
-        if (!user) {
-            // if User doesn't exist then make a new database entry
-            user = await User.build({
-                githubId: parseInt(profile.id),
-                name: profile.displayName,
-                email: profile.email,
-                username: profile.username,
-                createdAt: new Date(),
-                updatedAt: new Date(),
+            if (!user) {
+                // if User doesn't exist then make a new database entry
+                user = await User.build({
+                    githubId: parseInt(profile.id),
+                    name: profile.displayName,
+                    email: profile.email,
+                    username: profile.username,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
 
-            })
-            await user.save()
+                })
+                await user.save()
+            }
+            done(null, profile)
+        } catch (err) {
+            console.log(err)
         }
-        done(null, profile)
+
     }
 ));
 

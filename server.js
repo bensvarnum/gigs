@@ -4,6 +4,7 @@ const expressLayouts = require("express-ejs-layouts");
 const passport = require('passport');
 const flash = require('connect-flash');
 const session = require('express-session');
+const path = require('path')
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.set("view engine", "ejs");
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(
     session({
@@ -44,6 +46,7 @@ app.use((req, res, next) => {
 app.use("/", require("./routes/index"));
 app.use("/users", require("./routes/users"));
 app.use('/auth', require('./routes/auth-gh'))
+app.use('/api/gigs', require('./routes/gigs'))
 
 const PORT = process.env.PORT || 5000;
 

@@ -6,11 +6,11 @@ const passport = require('passport')
 const { forwardAuthenticated } = require('../config/auth');
 
 router.get("/login", forwardAuthenticated, (req, res) => {
-  res.render("login");
+  res.render("login", { user: req.user });
 });
 
 router.get("/register", forwardAuthenticated, (req, res) => {
-  res.render("register");
+  res.render("register", { user: req.user });
 });
 
 router.post('/register', async (req, res) => {

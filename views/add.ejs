@@ -1,0 +1,40 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body">
+            <h1 class="text-center mb-3">
+                <i class="fas fa-plus-square"></i> Add Project
+            </h1>
+            <%- include ("./partials/messages"); %>
+            <form action="/api/gigs/add" method="POST">
+                <div class="form-group">
+                    <label for="title">Project Title</label>
+                    <input type="title" id="title" name="title" class="form-control"
+                        placeholder="eg. Reactjs website, API development, blog website "
+                        value="<%= typeof title != 'undefined' ? title : '' %>" />
+                </div>
+                <div class="form-group">
+                    <label for="technologies">Technologies Needed</label>
+                    <input type="technologies" id="technologies" name="technologies" class="form-control"
+                        placeholder="eg. JavaScript, React.js, Node.js, MongoDB"
+                        value="<%= typeof technologies != 'undefined' ? technologies : '' %>" />
+                </div>
+                <div class="form-group">
+                    <label for="description">Project Information</label>
+                    <input type="description" id="description" name="description" class="form-control"
+                        placeholder="Describe the details of the project"
+                        value="<%= typeof description != 'undefined' ? description : '' %>" />
+                </div>
+                <div class="form-group">
+                    <label for="contact">How to Contact</label>
+                    <input type="contact" id="contact" name="contact" class="form-control"
+                        placeholder="Leave your email or GitHub username,"
+                        value="<%= typeof contact != 'undefined' ? contact : '' %>" />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                    Add Project
+                </button>
+            </form>
+
+        </div>
+    </div>
+</div>

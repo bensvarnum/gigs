@@ -20,5 +20,12 @@ module.exports = {
     database: process.env.PROD_NAME,
     host: process.env.PROD_HOST,
     dialect: "postgres",
+    "protocol": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   },
 };

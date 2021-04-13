@@ -3,11 +3,11 @@ const GitHubStrategy = require('passport-github2').Strategy;
 const passport = require('passport')
 const User = require('../models').User
 
-// http://localhost:5000/auth/github/callback
+//https://devswanted.herokuapp.com/auth/github/callback 
 passport.use(new GitHubStrategy({
     clientID: process.env.GITHUB_CLIENT_ID,
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "https://devswanted.herokuapp.com/auth/github/callback"
+    callbackURL: process.env.HOST_URL
 },
     async function (accessToken, refreshToken, profile, done) {
         try {

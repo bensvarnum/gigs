@@ -1,18 +1,22 @@
 <section id="search" class="search-wrap">
-    <h1>Find A Coding Gig</h1>
-    <form action="/gigs/search" class="search-form">
-        <i class="fas fa-search"></i>
-        <input type="search" name="term" placeholder="Javascript, PHP, Rails, etc...">
-        <input type="submit" value="Search">
-    </form>
+  <h1>Find A Coding Project</h1>
+  <form action="/gigs/search" class="search-form">
+    <i class="fas fa-search"></i>
+    <input
+      type="search"
+      name="term"
+      placeholder="Javascript, PHP, Rails, etc..."
+    />
+    <input type="submit" value="Search" />
+  </form>
 </section>
 <% gigs.forEach(function(gig){ %>
-<div class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
-    <div class="card-header"><%= gig.title %></div>
-    <div class="card-body">
-        <h6 class="card-title">Technologies: <%= gig.technologies %></h6>
-        <p class="card-text">Project Decription: <%= gig.description %></p>
-        <p class="card-text">Contact Information: <%= gig.contact %></p>
-    </div>
+<div class="card text-white bg-secondary mb-3" style="max-width: 20rem">
+  <div class="card-header"><%= gig.title %></div>
+  <div class="card-body">
+    <h6 class="card-title">Technologies: <%= gig.technologies %></h6>
+    <p class="card-text">Project Decription: <%= gig.description %></p>
+    <p class="card-text">Contact Information: <%= gig.contact %></p>
+  </div>
 </div>
 <% }) %>
